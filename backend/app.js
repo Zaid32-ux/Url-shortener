@@ -1,6 +1,6 @@
 import express from "express";
 import  dbConnection  from "./database/dbConnection.js";
-import apiRoutes from "./routes/api.js";
+import urlRoutes from "./routes/urlRoutes.js";
 import Url from "./models/Url.js";
 
 //“ config Load my secret variables from this file so I can use process.env.”
