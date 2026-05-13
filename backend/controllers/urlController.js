@@ -33,6 +33,23 @@ export const createShortUrl = async (req, res) => {
       });
     }
 
+    // Generate unique short code
+    let short_code;
+    let isUnique = false;
+
+    while (!isUnique) {
+      short_code = nanoid(6);
+
+      const existing = await Url.findOne({
+        short_code,
+      });
+
+      if (!existing) {
+        isUnique = true;
+      }
+    }
+
+    
   } catch (error) {
     console.error("Error creating short URL:", error);
     res.status(500).json({ error: "Server error" });
