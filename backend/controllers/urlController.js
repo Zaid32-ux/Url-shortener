@@ -9,6 +9,15 @@ export const createShortUrl = async (req, res) => {
     if (!original_url) {
       return res.status(400).json({ error: "Original URL is required" });
     }
+ // Add protocol if not present
+    let validUrl = original_url;
+
+    if (
+      !original_url.startsWith("http://") &&
+      !original_url.startsWith("https://")
+    ) {
+      validUrl = "https://" + original_url;
+    }
 
   } catch (error) {
     console.error("Error creating short URL:", error);
