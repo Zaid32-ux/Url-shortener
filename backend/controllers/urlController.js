@@ -19,6 +19,20 @@ export const createShortUrl = async (req, res) => {
       validUrl = "https://" + original_url;
     }
 
+    // Check if URL already exists
+    let existingUrl = await Url.findOne({
+      original_url: validUrl,
+    });
+
+    if (existingUrl) {
+      return res.json({
+        original_url: existingUrl.original_url,
+        short_code: existingUrl.short_code,
+        short_url: `${req.protocol}://${req.get("host")}/${existingUrl.short_code}`,
+        created_at: existingUrl.created_at,
+      });
+    }
+
   } catch (error) {
     console.error("Error creating short URL:", error);
     res.status(500).json({ error: "Server error" });
