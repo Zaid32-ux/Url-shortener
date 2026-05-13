@@ -49,7 +49,20 @@ export const createShortUrl = async (req, res) => {
       }
     }
 
-    
+    // Save new URL
+    const newUrl = new Url({
+      original_url: validUrl,
+      short_code,
+    });
+
+    await newUrl.save();
+
+    res.json({
+      original_url: newUrl.original_url,
+      short_code: newUrl.short_code,
+      short_url: `${req.protocol}://${req.get("host")}/${newUrl.short_code}`,
+      created_at: newUrl.created_at,
+    });
   } catch (error) {
     console.error("Error creating short URL:", error);
     res.status(500).json({ error: "Server error" });
