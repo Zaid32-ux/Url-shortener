@@ -40,6 +40,15 @@ app.get("/", (req, res) => {
     status: "running",
   });
 });
+// Health check route (must come before /:shortcode)
+app.get("/health", (req, res) => {
+  res.json({
+    status: "OK",
+    message: "URL Shortener API is running",
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV || "development",
+  });
+});
 
   dbConnection();
 export default app;
