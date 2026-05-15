@@ -11,6 +11,10 @@ import { config } from "dotenv";
 config({ path: "./.env" });//calling again in main file bcz load it globally its recommended
 const app = express();
 
+// ES6 module fix for __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // CORS configuration for frontend connection
 const corsOptions = {
   origin: ["http://localhost:5173"], // frontend URL
@@ -19,7 +23,8 @@ const corsOptions = {
 };
 
 app.use("/api", apiRoutes);
-
+app.use(cors(corsOptions));
 app.use(express.json());
+
   dbConnection();
 export default app;
