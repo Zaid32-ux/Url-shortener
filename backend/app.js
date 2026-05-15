@@ -50,5 +50,38 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Redirect route - GET /:shortcode (must come after specific routes)
+app.get("/:shortcode", async (req, res) => {
+  try {
+    const { shortcode } = req.params;
+
+    // Skip health and other system routes
+    if (
+      shortcode === "health" ||
+      shortcode === "api" ||
+      shortcode.startsWith("_")
+    ) {
+      return res.status(404).json({ error: "Route not found" });
+    }
+
+    // Find URL by short code
+    const url = await Url.findOne({ short_code: shortcode });
+
+    if (!url) {
+      return res.status(404).json({ error: "Short URL not found" });
+    }
+
+    // Increment visit count
+    url.visits += 1;
+    await url.save();
+
+    // Redirect to original URL
+    res.redirect(url.original_url);
+  } catch (error) {
+    console.error("Error redirecting:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
   dbConnection();
 export default app;
