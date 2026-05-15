@@ -26,5 +26,20 @@ app.use("/api", apiRoutes);
 app.use(cors(corsOptions));
 app.use(express.json());
 
+// Root route
+app.get("/", (req, res) => {
+  res.json({
+    message: "URL Shortener API",
+    version: "1.0.0",
+    endpoints: {
+      health: "/health",
+      shorten: "/api/shorten",
+      urls: "/api/urls",
+      redirect: "/:shortcode",
+    },
+    status: "running",
+  });
+});
+
   dbConnection();
 export default app;
